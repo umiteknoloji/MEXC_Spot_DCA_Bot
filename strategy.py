@@ -84,6 +84,8 @@ while True:
 
         if currentPrice > firstPrice:
             firstPrice = currentPrice
+
+        exchange.options['createMarketBuyOrderRequiresPrice'] = False
         
         # LONG ENTER
         def longEnter(alinacak_miktar):
