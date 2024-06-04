@@ -2,11 +2,11 @@ import config,os
 try:
     import ccxt
 except:
-    os.system("pip install ccxt")
+    os.system("pip3 install ccxt")
 try:
     import pandas as pd
 except:
-    os.system("pip install pandas")
+    os.system("pip3 install pandas")
 from smtplib import SMTP
 
 # SETTİNGS
@@ -48,7 +48,7 @@ highestPrice = 0
 lowestPrice = 0
 
 # API CONNECT
-exchange = ccxt.binance({
+exchange = ccxt.mexc({
 "apiKey": config.apiKey,
 "secret": config.secretKey,
 
@@ -68,7 +68,7 @@ while True:
         df = pd.DataFrame(bars, columns=["timestamp", "open", "high", "low", "close", "volume"])
 
         # in position?
-        if float(balance["total"][symbolName]) * float(df["close"][len(df.index) - 1]) >= 10:
+        if symbolName in balance["total"] and float(balance["total"][symbolName]) * float(df["close"][len(df.index) - 1]) >= 10:
             inPosition = True
         else: inPosition = False
 
@@ -81,6 +81,9 @@ while True:
             highestPrice = currentPrice
             lowestPrice = currentPrice
             first = False
+
+        if currentPrice > firstPrice:
+            firstPrice = currentPrice
         
         # LONG ENTER
         def longEnter(alinacak_miktar):
